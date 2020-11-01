@@ -12,7 +12,7 @@ app.get('/api/v1/users', (req, res) => {
   // Connect database
   const db = new sqlite3.Database(dbPath);
   db.all('SELECT * FROM users', (err, rows) => {
-    res.json({rows})
+    res.json(rows)
   })
 
   db.close()
