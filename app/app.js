@@ -2,9 +2,16 @@ const express = require('express');
 const app = express();
 const sqlite3 = require('sqlite3')
 const path =require('path')
+const bodyParser = require('body-parser')
 
 const dbPath = "app/db/database.sqlite3"
 
+// リクエストのbodyをパースする設定
+// リクエストに渡ってきたJSONのデータをexpressのAPIで利用できる様になる
+app.use(bodyParser.urlencoded({ extended:true }))
+app.use(bodyParser.json())
+
+// publicディレクトリを静的ファイル群のルートディレクトリとして設定
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Get a users
