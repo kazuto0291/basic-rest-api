@@ -28,11 +28,11 @@ app.get('/api/v1/users', (req, res) => {
 
 
 // Get a user
-app.get('/api/v1/user/:id', (req, res) => {
+app.get('/api/v1/users/:id', (req, res) => {
   // Connect database
   const db = new sqlite3.Database(dbPath)
   const id = req.params.id
-  db.get(`SELECT * FROM users where id = ${id}`, (err, row) => {
+  db.get(`SELECT * FROM users WHERE id=${id}`, (err, row) => {
     res.json(row)
   })
 
@@ -93,16 +93,35 @@ app.put('/api/v1/users/:id', async (req, res) => {
   const id = req.params.id
 
   // 現在のユーザー情報を取得する
-  db.get(`SELECT * FROM users WHERE id =${id} `, (err, row) => {
+  db.get(`SELECT * FROM users WHERE id =${id} `,async (err, row) => {
     const name = req.body.name ? req.body.name : row.name
     const profile = req.body.profile ? req.body.profile : row.profile
     const dateOfBirth = req.body.date_of_birth ? req.body.date_of_birth : row.date_of_birth
 
-    await run(
-      `UPDATE users SET name="`
+     await run(
+      `UPDATE users SET name="${name}", profile="${profile}", date_of_birth="${dateOfBirth}"  Where id=${id}`,
+      db,
+      res,
+      "ユーザの更新を行いました。"
 
     )
   })
+  db.close()
+})
+
+// Delete user data
+
+app.delete(`/api/v1/users/:id`, async (req, res) => {
+  // Connect datebase
+  const db = new sqlite3.Database(dbPath)
+  const id = req.params.id
+
+  await run(
+    `DELETE FROM users WHERE id = ${id}`,
+    db,
+    res,
+    "ユーザ情報を削除しました。"
+  )
   db.close()
 })
 
