@@ -15,7 +15,7 @@ const indexModule = (() => {
 
         case '/create.html':
             document.getElementById('save-btn').addEventListener('click', () => {
-                return usersMOdule.createUser()
+                return usersModule.createUser()
             })
             document.getElementById('cancel-btn').addEventListener('click', () => {
                 return window.location.href = '/'

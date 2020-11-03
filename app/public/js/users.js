@@ -50,6 +50,31 @@ const usersModule = (() => {
 
       alert(resJson.message)
       window.location.href = "/"
+    },
+    saveUser: async (uid) => {
+      const name = document.getElementById("name").value;
+      const profile = document.getElementById("profile").value;
+      const dateOfBirth = document.getElementById("date-of-birth").value;
+
+      // リクエストのbody作成
+      const body = {
+        name : name,
+        profile : profile,
+        date_of_birth: dateOfBirth
+      }
+
+      // fetchメソッドを投げる
+      const res = await fetch(BASE_URL + "/" + uid, {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify(body)
+      })
+
+      // 受け取ったresをJSONに変換
+      const resJson = await res.json()
+
+      alert(resJson.message)
+      window.location.href = "/"
     }
   }
 })()
