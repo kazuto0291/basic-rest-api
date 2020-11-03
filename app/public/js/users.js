@@ -1,7 +1,13 @@
 // 即時関数でモジュール化
 
+const { json } = require("body-parser")
+
 const usersModule = (() => {
   const BASE_URL = "http://localhost:3000/api/v1/users"
+
+  // ヘッダーの設定
+  const headers = new Headers()
+  headers.set("Content-Type", "application/json")
 
   return {
     fetchAllUsers: async () => {
@@ -21,6 +27,29 @@ const usersModule = (() => {
 
 
       }
+    },
+    createUser: async () => {
+      const name = document.getElementById('name').value;
+      const profile = document.getElementById('profile').value;
+      const dateOfBirth = document.getElementById('date-of-birth').value;
+
+      // リクエストのbody作成
+      const body = {
+        name : name,
+        profile: profile,
+        date_of_birth: dateOfBirth
+      }
+
+      const res = await fetch(BASE_URL, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body) //js形式をJSON型に変更
+      })
+
+      const resJson = await res.json()
+
+      alert(resJson.message)
+      window.location.href = "/"
     }
   }
 })()
