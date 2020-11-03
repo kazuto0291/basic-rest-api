@@ -9,6 +9,38 @@ const usersModule = (() => {
   const headers = new Headers()
   headers.set("Content-Type", "application/json")
 
+    //fetchで 受け取ったresをJSONに変換
+  const handleError = async (res) => {
+    const resJson = await res.json()
+
+    switch (res.status) {
+      case 200:
+        alert(resJson.message)
+        window.location.href = "/"
+        break;
+      case 201:
+        alert(resJson.message)
+        window.location.href = "/"
+        break;
+      case 400:
+        // リクエストのパラメータ間違い
+        alert(resJson.error)
+        break;
+      case 404:
+        // 指定したリソースが見つからない
+        alert(resJson.error)
+        break;
+      case 500:
+        // サーバーの内部エラー
+        alert(resJson.error)
+        break;
+
+      default:
+        alert("何らかのエラーが発生しました。")
+        break;
+    }
+  }
+
   return {
     fetchAllUsers: async () => {
       const res = await fetch(BASE_URL)
@@ -47,10 +79,8 @@ const usersModule = (() => {
         body: JSON.stringify(body) //js形式をJSON型に変更
       })
 
-      const resJson = await res.json()
+      return handleError(res)
 
-      alert(resJson.message)
-      window.location.href = "/"
     },
     setExistingValue: async (uid) => {
       // fetchを投げる
@@ -81,11 +111,8 @@ const usersModule = (() => {
         body: JSON.stringify(body)
       })
 
-      // 受け取ったresをJSONに変換
-      const resJson = await res.json()
+      return handleError(res)
 
-      alert(resJson.message)
-      window.location.href = "/"
     },
     deleteUser: async (uid) => {
       const ret = window.confirm('このユーザーを削除しますか？')
@@ -100,9 +127,7 @@ const usersModule = (() => {
         })
 
         // 受け取ったresをJSONに変換
-        const resJson = await res.json()
-        alert(resJson.message)
-        window.location.href = '/'
+        return handleError(res)
       }
     }
   }
