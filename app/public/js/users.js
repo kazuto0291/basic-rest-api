@@ -22,6 +22,7 @@ const usersModule = (() => {
                         <td>${user.date_of_birth}</td>
                         <td>${user.created_at}</td>
                         <td>${user.update_at}</td>
+                        <td><a href="edit.html?uid=${user.id}">編集</a></td>
                       </tr>`
         document.getElementById("users-list").insertAdjacentHTML('beforeend',body)
 
@@ -50,6 +51,16 @@ const usersModule = (() => {
 
       alert(resJson.message)
       window.location.href = "/"
+    },
+    setExistingValue: async (uid) => {
+      // fetchを投げる
+      const res = await fetch(BASE_URL + "/" + uid)
+      // 受け取ったresをJSONに変換
+      const resJson = await res.json()
+
+      document.getElementById('name').value = resJson.name
+      document.getElementById('profile').value = resJson.profile
+      document.getElementById('date-of-birth').value = resJson.date_of_birth
     },
     saveUser: async (uid) => {
       const name = document.getElementById("name").value;
@@ -97,4 +108,3 @@ const usersModule = (() => {
   }
 })()
 
-// console.log(usersModule.fetchAllUsers())
