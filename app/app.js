@@ -181,6 +181,51 @@ app.get(`/api/v1/users/:id/following`, (req, res) => {
 })
 
 
+// まだ作成できていない
+// GET following user
+app.get(`/api/v1/users/:id/following/:id`, (req, res) => {
+  // connect database
+  const db = new sqlite3.Database(dbPath)
+  const id = req.params.id
+
+  db.get(`SELECT 
+          FROM following
+          LEFT JOIN users
+          ON following.followed_id = users.id
+          WHERE follwoing_id = ${id}
+          ;`
+          ,(err, rows) => {
+            if (!rows) {
+              res.status(404).send({error:"Not Found!"})
+            } else {
+              res.status(200).json(rows)
+            }
+          })
+          db.close()
+})
+// -------------
+
+//  GET followers user
+app.get(`/api/v1/users/:id/followers`, (req, res) => {
+  // connect database
+  const db = new sqlite3.Database(dbPath)
+  const id = req.params.id
+
+  db.all(`SELECT *
+          FROM following
+          LEFT JOIN users
+          ON following.following_id = users.id
+          WHERE followed_id = ${id};`
+          ,(err, rows) => {
+            if (!rows) {
+              res.status(404).send({error:"Not Found!"})
+            } else {
+              res.status(200).json(rows)
+            }
+          })
+          db.close()
+})
+
 
 
 const port = process.env.PORT || 3000;
