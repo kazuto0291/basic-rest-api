@@ -1,6 +1,6 @@
 // 即時関数でモジュール化
 
-const { json } = require("body-parser")
+// const { json } = require("body-parser")
 
 const usersModule = (() => {
   const BASE_URL = "http://localhost:3000/api/v1/users"
